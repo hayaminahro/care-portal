@@ -30,15 +30,24 @@ services:
         condition: service_healthy
     ports:
       - "3000:3000"
+    # .env を読み込み（POSTGRES_* の「値」だけをここからもらう）
+    env_file:
+      - .env
     environment:
-      DATABASE_URL: postgres://postgres:postgres@db:5432/care_portal_development
-      RAILS_BIND: 0.0.0.0
+      RAILS_ENV: development
+      BINDING: 0.0.0.0
       PORT: 3000
+      # ← Compose が .env の値で ${...} を展開して URL を組み立てる
+      DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST:-db}:${POSTGRES_PORT:-5432}/${POSTGRES_DB}"
     command: >
       bash -lc '
         set -e
         bundle check || bundle install
-        chmod +x bin/dev
+        # foreman が無ければ入れる（bin/dev 用）
+        if ! command -v foreman >/dev/null 2>&1; then
+          gem install foreman -N
+        fi
+        chmod +x bin/dev || true
         rm -f tmp/pids/server.pid
         exec bin/dev
       '

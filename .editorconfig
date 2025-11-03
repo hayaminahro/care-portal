@@ -1,0 +1,42 @@
+# EditorConfig helps developers define and maintain consistent
+# coding styles between different editors and IDEs.
+# https://editorconfig.org
+
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = true
+
+# Ruby / ERB / Rake
+[*.{rb,rake,erb}]
+indent_size = 2
+
+# YAML (Rails設定・I18n)
+[*.yml]
+indent_size = 2
+
+# JSON
+[*.json]
+indent_size = 2
+
+# JavaScript / TypeScript
+[*.{js,ts,jsx,tsx}]
+indent_size = 2
+
+# Markdown（末尾スペースは意図的に残すのでトリムしない）
+[*.md]
+trim_trailing_whitespace = false
+
+# Dockerfile
+[Dockerfile*]
+indent_size = 2
+
+# Shell
+[*.{sh,zsh,bash}]
+indent_size = 2
+end_of_line = lf

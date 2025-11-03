@@ -33,6 +33,27 @@
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 
-
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# --- Rails/Docker 追加推奨 ---
+# pry/irb の履歴など開発者ローカルの一時ファイル
+/.byebug_history
+
+# テストや計測の生成物
+/coverage/
+/spec/examples.txt
+
+# bundler をローカルに落とす設定を使う人が居た場合の保険
+/vendor/bundle/
+
+# Kamal のシークレット（generator が .kamal/secrets を作る）
+/.kamal/secrets
+/.kamal/.env
+
+# direnv を使う場合
+/.envrc
+
+# macOS/Windows のゴミ（本来はグローバル ignore 推奨だが保険で）
+.DS_Store
+Thumbs.db
