@@ -1,2 +1,2 @@
-web: bin/rails server
-css: bin/rails tailwindcss:watch
+# Rails だけを常駐させる（Tailwind は起動前に1回ビルド）
+web: bin/rails server -b ${RAILS_BIND:-0.0.0.0} -p ${PORT:-3000}
