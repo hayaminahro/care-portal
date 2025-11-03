@@ -1,12 +1,17 @@
 FROM ruby:3.3-slim
 
+# 必要パッケージ
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
     build-essential libpq-dev git curl libyaml-dev pkg-config \
  && rm -rf /var/lib/apt/lists/*
 
+# foreman を事前インストール（念のため）
+RUN gem install foreman -N
+
+# 作業ディレクトリ
 WORKDIR /app
 
-# Gems の配置先と実行ファイルにPATHを通す
+# Gems の配置先と PATH
 ENV GEM_HOME=/usr/local/bundle
 ENV BUNDLE_PATH=/usr/local/bundle
 ENV PATH="$GEM_HOME/bin:$PATH"

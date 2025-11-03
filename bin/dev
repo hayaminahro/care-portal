@@ -1,16 +1,23 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+set -euo pipefail
+#!/usr/bin/env bash
+set -euo pipefail
 
-if ! gem list foreman -i --silent; then
-  echo "Installing foreman..."
-  gem install foreman
+# foreman の絶対パスを取得し、未導入なら導入
+FM="$(ruby -e 'puts Gem.bindir')/foreman"
+if [ ! -x "$FM" ]; then
+  gem install foreman -N
+  FM="$(ruby -e 'puts Gem.bindir')/foreman"
 fi
 
-# Default to port 3000 if not specified
-export PORT="${PORT:-3000}"
+# foreman/rails が確実に見えるように Gem bin を PATH に追加
+export PATH="$(ruby -e 'puts Gem.bindir'):$PATH"
 
-# Let the debug gem allow remote connections,
-# but avoid loading until `debugger` is called
-export RUBY_DEBUG_OPEN="true"
-export RUBY_DEBUG_LAZY="true"
+# CSS を一度だけビルド（watch はしない）
+bin/rails tailwindcss:build || true
 
-exec foreman start -f Procfile.dev "$@"
+# Rails の pid が残っていたら削除
+rm -f tmp/pids/server.pid
+
+# Procfile.dev（webのみ）で起動
+exec "$FM" start -f Procfile.dev
